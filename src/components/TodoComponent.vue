@@ -50,6 +50,9 @@ export default {
     },
 
   },
+  created(){
+    this.$store.dispatch('retrieveTodos')
+  },
   methods:{
      addTodo(){
        if(this.newTodo.trim() ==0){
