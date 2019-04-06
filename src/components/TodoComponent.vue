@@ -1,6 +1,7 @@
 <template>
   <div>
    <input type="text" class="todo-input" placeholder="What needs to be done" v-model="newTodo" @keyup.enter="addTodo"/>
+   <div v-if="$store.state.loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
    <transition-group name="fade" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
     <todo-item v-for="(todo , index) in todosFiltered" :key="todo.id" :todo="todo"  :index="index" :checkAll="!anyRemaining">
     </todo-item>
@@ -51,6 +52,7 @@ export default {
 
   },
   created(){
+        this.$store.dispatch('initRealtimeListeners')
     this.$store.dispatch('retrieveTodos')
   },
   methods:{
@@ -151,5 +153,42 @@ export default {
 }
 .fade-enter, .fade-leave-to{
   opacity:0;
+}
+//css spinner
+.lds-ring {
+  display: block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin:auto;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 51px;
+  height: 51px;
+  margin: 6px;
+  border: 6px solid grey;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #000 transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
